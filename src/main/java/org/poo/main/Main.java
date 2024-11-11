@@ -4,16 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.board.Board;
+import org.poo.cards.HeroCard;
+import org.poo.cards.MinionCard;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
-import org.poo.fileio.Input;
+import org.poo.fileio.*;
+import org.poo.game.Game;
+import org.poo.inputhandler.InputHandler;
+import org.poo.player.Deck;
+import org.poo.player.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * The entry point to this homework. It runs the checker that tests your implentation.
@@ -73,16 +83,35 @@ public final class Main {
           ObjectMapper mapper = new ObjectMapper();
 
          ObjectNode objectNode = mapper.createObjectNode();
-         objectNode.put("field_name", "field_value");
 
          ArrayNode arrayNode = mapper.createArrayNode();
          arrayNode.add(objectNode);
+         // implementing my approach for calling methods
+         InputHandler handler = new InputHandler();
+         ArrayList<GameInput> games = inputData.getGames();
+         Game game = new Game();
+         for (GameInput g : games) {
+             game = handler.setInitialSetup(inputData, g);
+             MinionCard playerOneCardDraw = game.getBoard().getPlayer(1).getUsingDeck().getCards().get(0);
+             MinionCard playerTwoCardDraw = game.getBoard().getPlayer(2).getUsingDeck().getCards().get(0);
+             game.getBoard().getPlayer(1).getHand().add(playerOneCardDraw);
+             game.getBoard().getPlayer(2).getHand().add(playerTwoCardDraw);
+             game.getBoard().getPlayer(1).getUsingDeck().getCards().remove(0);
+             game.getBoard().getPlayer(2).getUsingDeck().getCards().remove(0);
+             game.getBoard().getPlayer(1).setMana(1);
+             game.getBoard().getPlayer(2).setMana(1);
+             game.setNumRound(1);
+             for (ActionsInput action : g.getActions()) {
+                 handler.debugCommands(action, game, output);
+             }
+         }
+        //System.out.println(game.getBoard().getPlayer(1).getHand().get(0).getName());
+         //System.out.println(game.getBoard().getPlayer(2).getHand().get(0).getName());
 
-         output.add(arrayNode);
-         output.add(objectNode);
-
-
+        //System.out.println("\n");
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
     }
+    // need of copy constructor
+
 }

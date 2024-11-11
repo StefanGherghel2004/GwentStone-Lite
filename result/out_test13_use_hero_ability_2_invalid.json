@@ -1,5 +1,23 @@
-[ [ {
-  "field_name" : "field_value"
-} ], {
-  "field_name" : "field_value"
+[ {
+  "command" : "getPlayerTurn",
+  "output" : 2
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 17
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 13
+}, {
+  "command" : "getCardsOnTable",
+  "output" : [ [ ], [ ], [ ], [ ] ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ ]
 } ]

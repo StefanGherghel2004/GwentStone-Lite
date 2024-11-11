@@ -18,8 +18,8 @@ public final class Checkstyle {
      */
     public static int testCheckstyle() {
         ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar",
-                "src/main/java/org/poo/checker/checkstyle-8.36.2-all.jar", "-c",
-                "src/main/java/org/poo/checker/poo_checks.xml", "./");
+                CheckerConstants.CHECKER_PATH + "/checkstyle-8.36.2-all.jar", "-c",
+                CheckerConstants.CHECKER_PATH + "/poo_checks.xml", "./");
 
         processBuilder.redirectErrorStream(true);
         File log = new File("checkstyle.txt");
