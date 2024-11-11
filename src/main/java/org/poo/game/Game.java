@@ -6,13 +6,13 @@ import org.poo.board.Board;
 
 @Getter
 @Setter
-public class Game {
+public final class Game {
     private Board board;
     private int turn;
     private boolean playerOneRoundEnded;
     private boolean playerTwoRoundEnded;
     private int numRound;
-    public Game(Board board, int turn) {
+    public Game(final Board board, final int turn) {
         this.board = board;
         this.turn = turn;
     }

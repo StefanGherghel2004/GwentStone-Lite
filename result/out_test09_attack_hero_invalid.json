@@ -24,9 +24,9 @@
   "output" : [ {
     "mana" : 1,
     "attackDamage" : 6,
-    "health" : 3,
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "name" : "Miraj",
+    "health" : 3,
     "colors" : [ "Yellow", "Orange", "Red" ]
   } ]
 }, {
@@ -66,16 +66,86 @@
   "output" : 12
 }, {
   "command" : "getCardsOnTable",
-  "output" : [ [ ], [ ], [ ], [ ] ]
+  "output" : [ [ {
+    "mana" : 1,
+    "attackDamage" : 0,
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "name" : "The Cursed One",
+    "health" : 1,
+    "colors" : [ "Pink", "Purple" ]
+  }, {
+    "mana" : 1,
+    "attackDamage" : 5,
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "name" : "Berserker",
+    "health" : 1,
+    "colors" : [ "Purple", "Yellow" ]
+  }, {
+    "mana" : 1,
+    "attackDamage" : 6,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "name" : "Sentinel",
+    "health" : 2,
+    "colors" : [ "Black", "White" ]
+  } ], [ {
+    "mana" : 1,
+    "attackDamage" : 4,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 1,
+    "attackDamage" : 6,
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "name" : "Miraj",
+    "health" : 3,
+    "colors" : [ "Yellow", "Orange", "Red" ]
+  } ], [ {
+    "mana" : 2,
+    "attackDamage" : 5,
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "name" : "Miraj",
+    "health" : 4,
+    "colors" : [ "Red", "Black" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 3,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 3,
+    "colors" : [ "Black", "Yellow" ]
+  } ], [ {
+    "mana" : 1,
+    "attackDamage" : 5,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "name" : "Sentinel",
+    "health" : 2,
+    "colors" : [ "Black", "Grey", "Blue" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 0,
+    "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+    "name" : "The Cursed One",
+    "health" : 3,
+    "colors" : [ "Pink", "Purple" ]
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
     "mana" : 2,
     "attackDamage" : 5,
-    "health" : 4,
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "name" : "Miraj",
+    "health" : 4,
     "colors" : [ "Red", "Black" ]
   } ]
 }, {
@@ -84,9 +154,9 @@
   "output" : [ {
     "mana" : 2,
     "attackDamage" : 5,
-    "health" : 7,
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "name" : "Goliath",
+    "health" : 7,
     "colors" : [ "Brown", "Black", "Grey" ]
   } ]
 } ]

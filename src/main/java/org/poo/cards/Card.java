@@ -17,12 +17,12 @@ public class Card {
 
     }
 
-    public Card(CardInput cardinput) {
+    public Card(final CardInput cardinput) {
         this.description = cardinput.getDescription();
         this.colors = cardinput.getColors();
         this.name = cardinput.getName();
     }
-    public Card(String description, ArrayList<String> colors, String name) {
+    public Card(final String description, final ArrayList<String> colors, final String name) {
         this.description = description;
         this.colors = colors;
         this.name = name;
@@ -33,6 +33,10 @@ public class Card {
     }
 
     public int getHealth() {
+        return 0;
+    }
+
+    public int getAttackDamage() {
         return 0;
     }
 }

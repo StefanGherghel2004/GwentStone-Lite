@@ -4,16 +4,16 @@
   "output" : [ {
     "mana" : 4,
     "attackDamage" : 1,
-    "health" : 8,
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "name" : "Goliath",
+    "health" : 8,
     "colors" : [ "Brown", "Black", "Grey" ]
   }, {
     "mana" : 4,
     "attackDamage" : 1,
-    "health" : 7,
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "name" : "Goliath",
+    "health" : 7,
     "colors" : [ "Red", "Purple" ]
   } ]
 }, {
@@ -22,37 +22,41 @@
   "output" : [ {
     "mana" : 4,
     "attackDamage" : 4,
-    "health" : 4,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "name" : "Miraj",
+    "health" : 4,
     "colors" : [ "Red", "Black" ]
   }, {
     "mana" : 4,
     "attackDamage" : 1,
-    "health" : 7,
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "name" : "Goliath",
+    "health" : 7,
     "colors" : [ "Red", "Purple" ]
   } ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
+}, {
+  "command" : "placeCard",
+  "handIdx" : 1,
+  "error" : "Not enough mana to place card on table."
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
     "mana" : 5,
     "attackDamage" : 4,
-    "health" : 3,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "name" : "Miraj",
+    "health" : 3,
     "colors" : [ "Yellow", "Orange", "Red" ]
   }, {
     "mana" : 4,
     "attackDamage" : 1,
-    "health" : 7,
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "name" : "Goliath",
+    "health" : 7,
     "colors" : [ "Brown", "Black", "Grey" ]
   } ]
 }, {
@@ -61,32 +65,40 @@
   "output" : [ {
     "mana" : 4,
     "attackDamage" : 4,
-    "health" : 4,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "name" : "Miraj",
+    "health" : 4,
     "colors" : [ "Red", "Black" ]
   }, {
     "mana" : 4,
-    "attackDamage" : 5,
-    "health" : 4,
-    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
-    "name" : "The Ripper",
-    "colors" : [ "Orange", "Red", "Black" ]
+    "attackDamage" : 1,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Red", "Purple" ]
   }, {
     "mana" : 4,
     "attackDamage" : 2,
-    "health" : 7,
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "name" : "Goliath",
+    "health" : 7,
     "colors" : [ "Red", "Purple" ]
   } ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "placeCard",
+  "handIdx" : 0,
+  "error" : "Not enough mana to place card on table."
+}, {
+  "command" : "placeCard",
+  "handIdx" : 0,
+  "error" : "Not enough mana to place card on table."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 6
+  "output" : 9
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -96,16 +108,93 @@
   "output" : 2
 }, {
   "command" : "getCardsOnTable",
-  "output" : [ [ ], [ ], [ ], [ ] ]
+  "output" : [ [ ], [ {
+    "mana" : 2,
+    "attackDamage" : 2,
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "name" : "Warden",
+    "health" : 5,
+    "colors" : [ "Brown", "Blue" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Brown", "Black", "Grey" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Brown", "Black", "Grey" ]
+  }, {
+    "mana" : 5,
+    "attackDamage" : 4,
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "name" : "Miraj",
+    "health" : 3,
+    "colors" : [ "Yellow", "Orange", "Red" ]
+  } ], [ {
+    "mana" : 3,
+    "attackDamage" : 1,
+    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Brown", "Black", "Grey" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 5,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 4,
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "name" : "Miraj",
+    "health" : 4,
+    "colors" : [ "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 2,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Red", "Purple" ]
+  } ], [ ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
     "mana" : 3,
+    "attackDamage" : 5,
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "name" : "The Ripper",
+    "health" : 3,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 3,
     "attackDamage" : 1,
-    "health" : 8,
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "name" : "Goliath",
+    "health" : 8,
     "colors" : [ "Brown", "Black", "Grey" ]
   } ]
 }, {
@@ -114,16 +203,16 @@
   "output" : [ {
     "mana" : 5,
     "attackDamage" : 4,
-    "health" : 3,
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "name" : "Miraj",
+    "health" : 3,
     "colors" : [ "Red", "Black" ]
   }, {
     "mana" : 2,
     "attackDamage" : 3,
-    "health" : 5,
     "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
     "name" : "Warden",
+    "health" : 5,
     "colors" : [ "Black", "White", "Green" ]
   } ]
 }, {

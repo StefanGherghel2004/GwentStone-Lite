@@ -17,7 +17,105 @@
   "output" : 14
 }, {
   "command" : "getCardsOnTable",
-  "output" : [ [ ], [ ], [ ], [ ] ]
+  "output" : [ [ {
+    "mana" : 3,
+    "attackDamage" : 0,
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "name" : "The Cursed One",
+    "health" : 1,
+    "colors" : [ "Pink", "Purple" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 0,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "name" : "Disciple",
+    "health" : 2,
+    "colors" : [ "Yellow", "White" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 2,
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "name" : "Berserker",
+    "health" : 2,
+    "colors" : [ "Red", "Blue", "Pink" ]
+  } ], [ {
+    "mana" : 3,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 1,
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 5,
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Black", "Yellow" ]
+  } ], [ {
+    "mana" : 3,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 3,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 4,
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "name" : "Miraj",
+    "health" : 4,
+    "colors" : [ "Yellow", "Orange", "Red" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 5,
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Orange", "Red", "Black" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 5,
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "name" : "The Ripper",
+    "health" : 3,
+    "colors" : [ "Black", "Yellow" ]
+  } ], [ {
+    "mana" : 1,
+    "attackDamage" : 3,
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "name" : "Berserker",
+    "health" : 1,
+    "colors" : [ "Red", "Blue", "Pink" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 3,
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "name" : "Berserker",
+    "health" : 2,
+    "colors" : [ "Red", "Blue", "Pink" ]
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,

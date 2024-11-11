@@ -6,13 +6,11 @@ import org.poo.cards.MinionCard;
 import org.poo.player.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-public class Board {
+public final class Board {
     private static final int ROWS = 4;
-    private static final int COLUMNS = 5;
 
-    private ArrayList<ArrayList<MinionCard>> table;
+    final private ArrayList<ArrayList<MinionCard>> table;
     @Getter
     private Player playerOne;
     @Getter
@@ -22,49 +20,76 @@ public class Board {
     public Board() {
         table = new ArrayList<>(ROWS);
         for (int i = 0; i < ROWS; i++) {
-            ArrayList<MinionCard> row = new ArrayList<>(COLUMNS);
-            for (int j = 0; j < COLUMNS; j++) {
-                row.add(null);  // Initialize each cell to null
-            }
+            ArrayList<MinionCard> row = new ArrayList<>();
             table.add(row);
         }
     }
 
-    public Board(Player PlayerOne, Player PlayerTwo) {
+    public Board(final Player playerOne, final Player playerTwo) {
         this();
-        this.playerOne = new Player(PlayerOne);
-        this.playerTwo = new Player(PlayerTwo);
+        this.playerOne = new Player(playerOne);
+        this.playerTwo = new Player(playerTwo);
     }
 
-    // Method to get a card at specific coordinates (x, y)
-    public MinionCard getCardWithCoordinates(int x, int y) {
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public MinionCard getCardWithCoordinates(final int x, final int y) {
         // Adjust y index to 0-based for ArrayList indexing
         return table.get(x).get(y - 1);
     }
 
-    // Method to set a card at specific coordinates (x, y)
-    public void setCardWithCoordinates(int x, int y, MinionCard card) {
+    /**
+     *
+     * @param x
+     * @param y
+     * @param card
+     */
+    public void setCardWithCoordinates(final int x, final int y, final MinionCard card) {
         table.get(x).set(y - 1, card);
     }
 
-    // Method to get the hero for a specific player
-    public HeroCard getPlayerHero(int playerNumber) {
+    /**
+     *
+     * @param playerNumber
+     * @return
+     */
+    public HeroCard getPlayerHero(final int playerNumber) {
         return playerNumber == 1 ? playerOne.getHeroCard() : playerTwo.getHeroCard();
     }
 
-    public void setHero(int playerIdx, HeroCard hero) {
+    /**
+     *
+     * @param playerIdx
+     * @param hero
+     */
+    public void setHero(final int playerIdx, final HeroCard hero) {
         if (playerIdx == 1) {
             playerOne.setHeroCard(hero);
         } else if (playerIdx == 2) {
             playerTwo.setHeroCard(hero);
         }
     }
-    public Player getPlayer(int playerIdx) {
+
+    /**
+     *
+     * @param playerIdx
+     * @return
+     */
+    public Player getPlayer(final int playerIdx) {
         return playerIdx == 1 ? playerOne : playerTwo;
 
     }
 
-    public ArrayList<MinionCard> getRow(int rowIndex) {
+    /**
+     *
+     * @param rowIndex
+     * @return
+     */
+    public ArrayList<MinionCard> getRow(final int rowIndex) {
         return table.get(rowIndex);
     }
 

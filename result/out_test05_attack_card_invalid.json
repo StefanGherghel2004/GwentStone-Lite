@@ -4,16 +4,16 @@
   "output" : [ {
     "mana" : 2,
     "attackDamage" : 0,
-    "health" : 3,
     "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
     "name" : "The Cursed One",
+    "health" : 3,
     "colors" : [ "Pink", "Purple" ]
   }, {
     "mana" : 1,
     "attackDamage" : 3,
-    "health" : 1,
     "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
     "name" : "Berserker",
+    "health" : 1,
     "colors" : [ "Purple", "Yellow" ]
   } ]
 }, {
@@ -33,16 +33,86 @@
   "output" : 7
 }, {
   "command" : "getCardsOnTable",
-  "output" : [ [ ], [ ], [ ], [ ] ]
+  "output" : [ [ {
+    "mana" : 1,
+    "attackDamage" : 2,
+    "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
+    "name" : "Sentinel",
+    "health" : 2,
+    "colors" : [ "Black", "White" ]
+  }, {
+    "mana" : 1,
+    "attackDamage" : 3,
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "name" : "Berserker",
+    "health" : 1,
+    "colors" : [ "Purple", "Yellow" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 0,
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "name" : "The Cursed One",
+    "health" : 3,
+    "colors" : [ "Pink", "Purple" ]
+  } ], [ {
+    "mana" : 3,
+    "attackDamage" : 2,
+    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+    "name" : "Goliath",
+    "health" : 8,
+    "colors" : [ "Brown", "Black", "Grey" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 4,
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "name" : "Miraj",
+    "health" : 3,
+    "colors" : [ "Yellow", "Orange", "Red" ]
+  } ], [ {
+    "mana" : 3,
+    "attackDamage" : 3,
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "name" : "Warden",
+    "health" : 5,
+    "colors" : [ "Brown", "Blue" ]
+  }, {
+    "mana" : 3,
+    "attackDamage" : 2,
+    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+    "name" : "Goliath",
+    "health" : 7,
+    "colors" : [ "Red", "Purple" ]
+  }, {
+    "mana" : 4,
+    "attackDamage" : 4,
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "name" : "Miraj",
+    "health" : 3,
+    "colors" : [ "Red", "Black" ]
+  } ], [ {
+    "mana" : 2,
+    "attackDamage" : 1,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "name" : "Sentinel",
+    "health" : 3,
+    "colors" : [ "Black", "Grey", "Blue" ]
+  }, {
+    "mana" : 2,
+    "attackDamage" : 0,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "name" : "Disciple",
+    "health" : 2,
+    "colors" : [ "Yellow", "White" ]
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
     "mana" : 1,
     "attackDamage" : 2,
-    "health" : 1,
     "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
     "name" : "Berserker",
+    "health" : 1,
     "colors" : [ "Red", "Blue", "Pink" ]
   } ]
 }, {
@@ -51,9 +121,9 @@
   "output" : [ {
     "mana" : 4,
     "attackDamage" : 5,
-    "health" : 3,
     "description" : "Standard card: Death incarnate. No better time to die than now.",
     "name" : "The Ripper",
+    "health" : 3,
     "colors" : [ "Black", "Yellow" ]
   } ]
 } ]

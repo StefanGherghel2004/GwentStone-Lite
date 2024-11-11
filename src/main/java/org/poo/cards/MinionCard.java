@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 @Setter
 @Getter
-public class MinionCard extends Card {
+public final class MinionCard extends Card {
     @Getter
     private int mana;
     private int health;
@@ -21,7 +21,7 @@ public class MinionCard extends Card {
     }
 
 
-    public MinionCard(String name, String description, ArrayList<String> colors, int mana, int health, int attackDamage) {
+    public MinionCard(final String name, final String description, final ArrayList<String> colors, final int mana, final int health, final int attackDamage) {
         super(description, colors, name);
         this.mana = mana;
         this.health = health;
@@ -29,7 +29,7 @@ public class MinionCard extends Card {
         this.frozen = false;
     }
 
-    public MinionCard(CardInput cardinput) {
+    public MinionCard(final CardInput cardinput) {
         super(cardinput);
         this.mana = cardinput.getMana();
         this.health = cardinput.getHealth();
@@ -38,7 +38,7 @@ public class MinionCard extends Card {
     }
 
     // copy constructor
-    public MinionCard(MinionCard other) {
+    public MinionCard(final MinionCard other) {
         super(other.description, other.colors, other.name);  // Copy fields from the Card superclass
         this.mana = other.mana;
         this.health = other.health;
@@ -46,7 +46,11 @@ public class MinionCard extends Card {
         this.frozen = other.frozen;
     }
 
-    public void useSpecialAbility(MinionCard target) {
+    /**
+     *
+     * @param target
+     */
+    public void useSpecialAbility(final MinionCard target) {
         if (isFrozen()) {
             return;
         }
@@ -67,6 +71,38 @@ public class MinionCard extends Card {
             case "Disciple":
                 this.health += 2;
                 break;
+
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     * @param card
+     * @param playerIdx
+     * @return
+     */
+    public int rowToPlace(final MinionCard card, final int playerIdx) {
+        boolean backrow = false;
+        boolean frontrow = false;
+        if (card.getName().equals("The Ripper") || card.getName().equals("Miraj") || card.getName().equals("Goliath") || card.getName().equals("Warden")) {
+            frontrow = true;
+        }
+        if (card.getName().equals("The Cursed One") || card.getName().equals("Disciple") || card.getName().equals("Sentinel") || card.getName().equals("Berserker")) {
+            backrow = true;
+        }
+
+        if (playerIdx == 1) {
+            if (backrow) {
+                return 3;
+            }
+            return 2;
+        } else  {
+            if (backrow) {
+                return 0;
+            }
+            return 1;
         }
     }
 

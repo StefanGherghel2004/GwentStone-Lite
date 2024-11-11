@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @Setter
 @Getter
-public class Player {
+public final class Player {
     private HeroCard heroCard;
     private ArrayList<MinionCard> hand;
     private Deck usingDeck;
@@ -20,7 +20,7 @@ public class Player {
     public Player() {
 
     }
-    public Player(ArrayList<ArrayList<CardInput>> decks, int usingDeckIndex, int seed) {
+    public Player(final ArrayList<ArrayList<CardInput>> decks, final int usingDeckIndex, final int seed) {
         this.hand = new ArrayList<MinionCard>();
         this.decks = new ArrayList<Deck>();
         for (ArrayList<CardInput> deck : decks) {
@@ -30,7 +30,7 @@ public class Player {
         this.usingDeck.shuffle(seed);
     }
 
-    public Player(Player otherPlayer) {
+    public Player(final Player otherPlayer) {
         this.heroCard = new HeroCard(otherPlayer.getHeroCard());
 
         // Deep copy the hand
@@ -48,12 +48,20 @@ public class Player {
         }
     }
 
-    public void decreaseMana(int mana) {
-        this.mana -= mana;
+    /**
+     *
+     * @param otherMana
+     */
+    public void decreaseMana(final int otherMana) {
+        this.mana -= otherMana;
     }
 
-    public void increaseMana(int mana) {
-        this.mana += mana;
+    /**
+     *
+     * @param otherMana
+     */
+    public void increaseMana(final int otherMana) {
+        this.mana += otherMana;
     }
 
 }

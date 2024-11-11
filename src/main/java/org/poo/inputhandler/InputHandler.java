@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.board.Board;
+import org.poo.cards.Card;
 import org.poo.cards.HeroCard;
 import org.poo.cards.MinionCard;
 import org.poo.fileio.ActionsInput;
@@ -12,12 +13,20 @@ import org.poo.fileio.Input;
 import org.poo.game.Game;
 import org.poo.player.Player;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class InputHandler {
+public final class InputHandler {
 
-    public Game setInitialSetup(Input inputData, GameInput game) {
+    public static final int MAX_STAMINA = 10;
+    public static final int ROW_LENGTH = 5;
+
+    /**
+     *
+     * @param inputData
+     * @param game
+     * @return
+     */
+    public Game setInitialSetup(final Input inputData, final GameInput game) {
 
 
             // Initialize players with their decks and shuffle seeds
@@ -47,49 +56,36 @@ public class InputHandler {
             return myGame;
     }
 
-    // skeleton
-    public void debugCommands(ActionsInput actionsInput, Game game, ArrayNode output) {
+    /**
+     *
+     * @param actionsInput
+     * @param game
+     * @param output
+     */
+    public void debugCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
         ObjectMapper mapper = new ObjectMapper();
-        if (actionsInput.getCommand().equals("getCardsInHand")) {
+        String command = actionsInput.getCommand();
+        if (command.equals("getCardsInHand")) {
 
-            // Create the main object
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", "getCardsInHand");
             mainNode.put("playerIdx", actionsInput.getPlayerIdx());
 
-            // Create the output array node
             ArrayNode outputArrayNode = mapper.createArrayNode();
 
-            // Iterate over each card in the player's deck
             for (MinionCard card : game.getBoard().getPlayer(actionsInput.getPlayerIdx()).getHand()) {
-                // Create an object node for each card
-                ObjectNode cardNode = mapper.createObjectNode();
-                cardNode.put("mana", card.getMana());
-                cardNode.put("attackDamage", card.getAttackDamage());
-                cardNode.put("health", card.getHealth());
-                cardNode.put("description", card.getDescription());
-                cardNode.put("name", card.getName());
 
-                // Create and populate the colors array for each card
-                ArrayNode colorsArray = mapper.createArrayNode();
-                for (String color : card.getColors()) {
-                    colorsArray.add(color);
-                }
-                cardNode.set("colors", colorsArray);
-
-                // Add the card node to the output array node
+                ObjectNode cardNode = cardToJson(card, mapper);
                 outputArrayNode.add(cardNode);
             }
 
-            // Attach the output array node to the main node
             mainNode.set("output", outputArrayNode);
 
             output.add(mainNode);
 
 
-        } else if (actionsInput.getCommand().equals("getPlayerDeck")) {
+        } else if (command.equals("getPlayerDeck")) {
 
-            // Create the main object
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", "getPlayerDeck");
             mainNode.put("playerIdx", actionsInput.getPlayerIdx());
@@ -100,19 +96,7 @@ public class InputHandler {
             // Iterate over each card in the player's deck
             for (MinionCard card : game.getBoard().getPlayer(actionsInput.getPlayerIdx()).getUsingDeck().getCards()) {
                 // Create an object node for each card
-                ObjectNode cardNode = mapper.createObjectNode();
-                cardNode.put("mana", card.getMana());
-                cardNode.put("attackDamage", card.getAttackDamage());
-                cardNode.put("health", card.getHealth());
-                cardNode.put("description", card.getDescription());
-                cardNode.put("name", card.getName());
-
-                // Create and populate the colors array for each card
-                ArrayNode colorsArray = mapper.createArrayNode();
-                for (String color : card.getColors()) {
-                    colorsArray.add(color);
-                }
-                cardNode.set("colors", colorsArray);
+                ObjectNode cardNode = cardToJson(card, mapper);
 
                 // Add the card node to the output array node
                 outputArrayNode.add(cardNode);
@@ -124,7 +108,7 @@ public class InputHandler {
             output.add(mainNode);
 
 
-        } else if (actionsInput.getCommand().equals("getCardsOnTable")) {
+        } else if (command.equals("getCardsOnTable")) {
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", "getCardsOnTable");
 
@@ -136,27 +120,11 @@ public class InputHandler {
 
                 for (MinionCard card : boardRow) {
                     if (card != null) {
-                        // Create an ObjectNode for each card and populate it with the card's properties
-                        ObjectNode cardNode = mapper.createObjectNode();
-                        cardNode.put("mana", card.getMana());
-                        cardNode.put("attackDamage", card.getAttackDamage());
-                        cardNode.put("health", card.getHealth());
-                        cardNode.put("description", card.getDescription());
-
-                        // Add colors as an array
-                        ArrayNode colorsArray = mapper.createArrayNode();
-                        for (String color : card.getColors()) {
-                            colorsArray.add(color);
-                        }
-                        cardNode.set("colors", colorsArray);
-
-                        cardNode.put("name", card.getName());
-
-                        // Add the card's JSON representation to the row array
+                        ObjectNode cardNode = cardToJson(card, mapper);
                         rowArray.add(cardNode);
                     } else {
                         // Add an empty object or skip if there's no card in this slot
-
+                        System.out.println();
                     }
                 }
 
@@ -168,14 +136,14 @@ public class InputHandler {
             mainNode.set("output", boardRows);
             output.add(mainNode);
 
-        } else if (actionsInput.getCommand().equals("getPlayerTurn")) {
+        } else if (command.equals("getPlayerTurn")) {
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", actionsInput.getCommand());
             mainNode.put("output", game.getTurn());
 
             output.add(mainNode);
 
-        } else if (actionsInput.getCommand().equals("getPlayerHero")) {
+        } else if (command.equals("getPlayerHero")) {
 
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", "getPlayerHero");
@@ -196,9 +164,11 @@ public class InputHandler {
             mainNode.set("output", outputNode);
             output.add(mainNode);
 
-        } else if (actionsInput.getCommand().equals("getCardAtPosition")) {
-
-        } else if (actionsInput.getCommand().equals("getPlayerMana")) {
+        } else if (command.equals("getCardAtPosition")) {
+            if (game.getBoard().getTable().get(actionsInput.getY()).size() <= actionsInput.getX()) {
+                System.out.println("Nu exista carte pe pozitia " + actionsInput.getX() + actionsInput.getY());
+            }
+        } else if (command.equals("getPlayerMana")) {
             ObjectNode mainNode = mapper.createObjectNode();
 
             mainNode.put("command", "getPlayerMana");
@@ -207,20 +177,26 @@ public class InputHandler {
 
             output.add(mainNode);
 
-        } else if (actionsInput.getCommand().equals("getFrozenCardsOnTable")) {
-
+        } else if (command.equals("getFrozenCardsOnTable")) {
+            System.out.println("");
         } else {
             InputHandler inputHandler = new InputHandler();
             inputHandler.statsCommands(actionsInput, game, output);
         }
     }
 
-    public void statsCommands(ActionsInput actionsInput, Game game, ArrayNode output) {
+    /**
+     *
+     * @param actionsInput
+     * @param game
+     * @param output
+     */
+    public void statsCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
         if (actionsInput.getCommand().equals("getTotalGamesPlayed")) {
-
+            System.out.println("");
         } else if (actionsInput.getCommand().equals("getPlayerOneWins")) {
-
-        } else if(actionsInput.getCommand().equals("getPlayerTwoWins")) {
+            System.out.println("");
+        } else if (actionsInput.getCommand().equals("getPlayerTwoWins")) {
 
         } else {
             InputHandler inputHandler = new InputHandler();
@@ -228,7 +204,8 @@ public class InputHandler {
         }
     }
 
-    public void playCommands(ActionsInput actionsInput, Game game, ArrayNode output) {
+    public void playCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
+        ObjectMapper mapper  = new ObjectMapper();
         if (actionsInput.getCommand().equals("endPlayerTurn")) {
                 if (game.getTurn() == 1) {
                     game.setTurn(2);
@@ -243,12 +220,12 @@ public class InputHandler {
                     game.setPlayerOneRoundEnded(false);
                     game.setNumRound(game.getNumRound() + 1);
                     // needing condition to not add more than 10 mana
-                    if (game.getNumRound() <= 10) {
+                    if (game.getNumRound() <= MAX_STAMINA) {
                         game.getBoard().getPlayer(1).increaseMana(game.getNumRound());
                         game.getBoard().getPlayer(2).increaseMana(game.getNumRound());
                     } else {
-                        game.getBoard().getPlayer(1).increaseMana(10);
-                        game.getBoard().getPlayer(2).increaseMana(10);
+                        game.getBoard().getPlayer(1).increaseMana(MAX_STAMINA);
+                        game.getBoard().getPlayer(2).increaseMana(MAX_STAMINA);
                     }
                     // needing to draw card if the deck is not empty
                     if (!game.getBoard().getPlayer(1).getUsingDeck().getCards().isEmpty()) {
@@ -262,26 +239,82 @@ public class InputHandler {
                 }
 
         } else if (actionsInput.getCommand().equals("placeCard")) {
-                // error handling
-                if (actionsInput.getHandIdx() < game.getBoard().getPlayer(game.getTurn()).getHand().size()) {
-                    game.getBoard().getPlayer(game.getTurn()).decreaseMana(game.getBoard().getPlayer(game.getTurn()).getHand().get(actionsInput.getHandIdx()).getMana());
-                    game.getBoard().getPlayer(game.getTurn()).getHand().remove(actionsInput.getHandIdx());
+
+            Player currentPlayer = game.getBoard().getPlayer(game.getTurn());
+
+            if (actionsInput.getHandIdx() < currentPlayer.getHand().size()) {
+
+                MinionCard cardToPlace = currentPlayer.getHand().get(actionsInput.getHandIdx());
+
+                // Check if the player has enough mana to place the card
+                if (currentPlayer.getMana() < cardToPlace.getMana()) {
+                    // Handle case where the player has insufficient mana
+                    ObjectNode errorNode = mapper.createObjectNode();
+                    errorNode.put("command", "placeCard");
+                    errorNode.put("handIdx", actionsInput.getHandIdx());
+                    errorNode.put("error", "Not enough mana to place card on table.");
+
+                    output.add(errorNode);
+                } else {
+                    int row = cardToPlace.rowToPlace(cardToPlace, game.getTurn());
+
+                    if (game.getBoard().getRow(row).size() < ROW_LENGTH) {
+                        currentPlayer.decreaseMana(cardToPlace.getMana());
+
+                        game.getBoard().getRow(row).add(cardToPlace);
+
+                        currentPlayer.getHand().remove(actionsInput.getHandIdx());
+                    } else {
+                        // Handle case where the row is full
+                        ObjectNode errorNode = mapper.createObjectNode();
+                        errorNode.put("command", "placeCard");
+                        errorNode.put("handIdx", actionsInput.getHandIdx());
+                        errorNode.put("error", "Cannot place card on table since row is full.");
+
+                        output.add(errorNode);
+                    }
                 }
+            } else {
+                ObjectNode errorNode = mapper.createObjectNode();
+                errorNode.put("command", "placeCard");
+                errorNode.put("handIdx", actionsInput.getHandIdx());
+                errorNode.put("error", "Invalid hand index");
+
+                output.add(errorNode);
+            }
 
 
         } else if (actionsInput.getCommand().equals("cardUsesAttack")) {
-
+            System.out.println();
         } else if (actionsInput.getCommand().equals("cardUsesAbility")) {
-
+            System.out.println();
         } else if (actionsInput.getCommand().equals("useAttackHero")) {
-
+            System.out.println();
         } else if (actionsInput.getCommand().equals("useAbility")) {
-
+            System.out.println();
         } else if (actionsInput.getCommand().equals("useHeroAbility")) {
-
+            System.out.println();
         } else {
             System.out.println(actionsInput.getCommand());
         }
+    }
+
+    public static ObjectNode cardToJson(final Card card, final ObjectMapper mapper) {
+        ObjectNode outputNode = mapper.createObjectNode();
+
+        outputNode.put("mana", card.getMana());
+        outputNode.put("attackDamage", card.getAttackDamage());
+        outputNode.put("description", card.getDescription());
+        outputNode.put("name", card.getName());
+        outputNode.put("health", card.getHealth());
+
+        ArrayNode colorsArray = mapper.createArrayNode();
+        for (String color : card.getColors()) {
+            colorsArray.add(color);
+        }
+        outputNode.set("colors", colorsArray);
+
+        return outputNode;
     }
 
 }

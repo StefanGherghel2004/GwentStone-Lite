@@ -4,26 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.board.Board;
-import org.poo.cards.HeroCard;
 import org.poo.cards.MinionCard;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
 import org.poo.fileio.*;
 import org.poo.game.Game;
 import org.poo.inputhandler.InputHandler;
-import org.poo.player.Deck;
-import org.poo.player.Player;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
-import java.util.Random;
+
 
 /**
  * The entry point to this homework. It runs the checker that tests your implentation.
@@ -105,10 +99,7 @@ public final class Main {
                  handler.debugCommands(action, game, output);
              }
          }
-        //System.out.println(game.getBoard().getPlayer(1).getHand().get(0).getName());
-         //System.out.println(game.getBoard().getPlayer(2).getHand().get(0).getName());
 
-        //System.out.println("\n");
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
     }

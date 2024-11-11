@@ -11,16 +11,51 @@
   "output" : 7
 }, {
   "command" : "getCardsOnTable",
-  "output" : [ [ ], [ ], [ ], [ ] ]
+  "output" : [ [ {
+    "mana" : 1,
+    "attackDamage" : 6,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "name" : "Sentinel",
+    "health" : 3,
+    "colors" : [ "Black", "Grey", "Blue" ]
+  }, {
+    "mana" : 1,
+    "attackDamage" : 0,
+    "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+    "name" : "The Cursed One",
+    "health" : 3,
+    "colors" : [ "Black", "White", "Red" ]
+  } ], [ {
+    "mana" : 2,
+    "attackDamage" : 6,
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "name" : "The Ripper",
+    "health" : 4,
+    "colors" : [ "Black", "Yellow" ]
+  } ], [ {
+    "mana" : 1,
+    "attackDamage" : 7,
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "name" : "Warden",
+    "health" : 5,
+    "colors" : [ "Brown", "Blue" ]
+  } ], [ {
+    "mana" : 2,
+    "attackDamage" : 0,
+    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+    "name" : "Disciple",
+    "health" : 2,
+    "colors" : [ "Yellow", "White" ]
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
     "mana" : 2,
     "attackDamage" : 5,
-    "health" : 1,
     "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
     "name" : "Berserker",
+    "health" : 1,
     "colors" : [ "Purple", "Yellow" ]
   } ]
 }, {
@@ -29,16 +64,16 @@
   "output" : [ {
     "mana" : 1,
     "attackDamage" : 0,
-    "health" : 2,
     "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
     "name" : "Disciple",
+    "health" : 2,
     "colors" : [ "Yellow", "White" ]
   }, {
     "mana" : 2,
     "attackDamage" : 6,
-    "health" : 3,
     "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
     "name" : "Sentinel",
+    "health" : 3,
     "colors" : [ "Black", "White" ]
   } ]
 } ]
