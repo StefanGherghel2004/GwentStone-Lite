@@ -86,12 +86,12 @@ public final class Main {
          Game game = new Game();
          for (GameInput g : games) {
              game = handler.setInitialSetup(inputData, g);
-             MinionCard playerOneCardDraw = game.getBoard().getPlayer(1).getUsingDeck().getCards().get(0);
-             MinionCard playerTwoCardDraw = game.getBoard().getPlayer(2).getUsingDeck().getCards().get(0);
-             game.getBoard().getPlayer(1).getHand().add(playerOneCardDraw);
-             game.getBoard().getPlayer(2).getHand().add(playerTwoCardDraw);
-             game.getBoard().getPlayer(1).getUsingDeck().getCards().remove(0);
-             game.getBoard().getPlayer(2).getUsingDeck().getCards().remove(0);
+             MinionCard oneCardDraw = game.getBoard().getPlayer(1).getUsingDeck().getCards().get(0);
+             MinionCard twoCardDraw = game.getBoard().getPlayer(2).getUsingDeck().getCards().get(0);
+             game.getBoard().getPlayer(1).getHand().add(oneCardDraw);
+             game.getBoard().getPlayer(2).getHand().add(twoCardDraw);
+             game.getBoard().getPlayer(1).getUsingDeck().getCards().removeFirst();
+             game.getBoard().getPlayer(2).getUsingDeck().getCards().removeFirst();
              game.getBoard().getPlayer(1).setMana(1);
              game.getBoard().getPlayer(2).setMana(1);
              game.setNumRound(1);

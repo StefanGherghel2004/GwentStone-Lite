@@ -1,19 +1,19 @@
 package org.poo.board;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.poo.cards.HeroCard;
 import org.poo.cards.MinionCard;
 import org.poo.player.Player;
 
 import java.util.ArrayList;
-
+@Getter
+@Setter
 public final class Board {
     private static final int ROWS = 4;
 
     final private ArrayList<ArrayList<MinionCard>> table;
-    @Getter
     private Player playerOne;
-    @Getter
     private Player playerTwo;
 
     // Default constructor that initializes the board with ROWS x COLUMNS
@@ -39,7 +39,33 @@ public final class Board {
      */
     public MinionCard getCardWithCoordinates(final int x, final int y) {
         // Adjust y index to 0-based for ArrayList indexing
-        return table.get(x).get(y - 1);
+        return table.get(x).get(y);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     */
+    public void removeCardWithCoordinates(final int x, final int y) {
+        table.get(x).remove(y);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean areCoordinatesWithinBounds(final int x, final int y) {
+        if (x > table.size() - 1) {
+            return false;
+        }
+
+        if (y > table.get(x).size() - 1) {
+            return false;
+        }
+        return true;
     }
 
     /**

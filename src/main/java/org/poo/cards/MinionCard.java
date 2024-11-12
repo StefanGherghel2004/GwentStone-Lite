@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.poo.fileio.CardInput;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 
 @Setter
@@ -15,6 +16,7 @@ public final class MinionCard extends Card {
     private int health;
     private int attackDamage;
     private boolean frozen;
+    private int attacked;
 
     public MinionCard() {
 
@@ -56,6 +58,7 @@ public final class MinionCard extends Card {
         }
         switch (this.name) {
             case "The Ripper":
+
                 target.setAttackDamage(Math.max(0, target.getAttackDamage() - 2));
                 break;
             case "Miraj":
@@ -64,17 +67,21 @@ public final class MinionCard extends Card {
                 target.setHealth(tempHealth);
                 break;
             case "The Cursed One":
-                int temp = this.attackDamage;
-                this.attackDamage = this.health;
-                this.health = temp;
+                int temp = target.attackDamage;
+                target.attackDamage = target.health;
+                target.health = temp;
                 break;
             case "Disciple":
-                this.health += 2;
+                target.increaseHealth(2);
                 break;
 
             default:
                 break;
         }
+    }
+
+    private void increaseHealth(final int inc) {
+        this.health += inc;
     }
 
     /**
@@ -84,14 +91,9 @@ public final class MinionCard extends Card {
      * @return
      */
     public int rowToPlace(final MinionCard card, final int playerIdx) {
-        boolean backrow = false;
-        boolean frontrow = false;
-        if (card.getName().equals("The Ripper") || card.getName().equals("Miraj") || card.getName().equals("Goliath") || card.getName().equals("Warden")) {
-            frontrow = true;
-        }
-        if (card.getName().equals("The Cursed One") || card.getName().equals("Disciple") || card.getName().equals("Sentinel") || card.getName().equals("Berserker")) {
-            backrow = true;
-        }
+        Set<String> cards = Set.of("The Cursed One", "Disciple", "Sentinel", "Berserker");
+
+        boolean backrow = cards.contains(card.getName());
 
         if (playerIdx == 1) {
             if (backrow) {
@@ -104,6 +106,28 @@ public final class MinionCard extends Card {
             }
             return 1;
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isTank() {
+        if (this.name.equals("Goliath")) {
+            return true;
+        }
+        if (this.name.equals("Warden")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param otherHealth
+     */
+    public void decreaseHealth(final int otherHealth) {
+        this.health -= otherHealth;
     }
 
 }

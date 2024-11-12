@@ -24,6 +24,18 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getCardAtPosition",
+  "x" : 0,
+  "y" : 0,
+  "output" : {
+    "mana" : 3,
+    "attackDamage" : 0,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "name" : "Disciple",
+    "health" : 2,
+    "colors" : [ "Green", "Yellow", "Blue" ]
+  }
+}, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
@@ -49,6 +61,18 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getCardAtPosition",
+  "x" : 0,
+  "y" : 0,
+  "output" : {
+    "mana" : 3,
+    "attackDamage" : 0,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "name" : "Disciple",
+    "health" : 2,
+    "colors" : [ "Green", "Yellow", "Blue" ]
+  }
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 7
@@ -66,7 +90,7 @@
     "attackDamage" : 0,
     "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
     "name" : "Disciple",
-    "health" : 2,
+    "health" : 8,
     "colors" : [ "Green", "Yellow", "Blue" ]
   }, {
     "mana" : 2,
@@ -84,17 +108,17 @@
     "colors" : [ "Pink", "Purple" ]
   } ], [ {
     "mana" : 3,
-    "attackDamage" : 1,
+    "attackDamage" : 0,
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "name" : "Goliath",
-    "health" : 7,
+    "health" : 5,
     "colors" : [ "Red", "Purple" ]
   }, {
     "mana" : 5,
     "attackDamage" : 4,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "name" : "Miraj",
-    "health" : 3,
+    "health" : 6,
     "colors" : [ "Red", "Black" ]
   }, {
     "mana" : 3,
@@ -122,14 +146,14 @@
     "attackDamage" : 5,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "name" : "Miraj",
-    "health" : 4,
+    "health" : 11,
     "colors" : [ "Yellow", "Orange", "Red" ]
   } ], [ {
     "mana" : 1,
-    "attackDamage" : 2,
+    "attackDamage" : 3,
     "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
     "name" : "Sentinel",
-    "health" : 3,
+    "health" : 2,
     "colors" : [ "Black", "White" ]
   } ] ]
 }, {

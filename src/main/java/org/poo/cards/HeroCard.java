@@ -6,12 +6,14 @@ import java.util.ArrayList;
 
 public final class HeroCard extends Card {
     private int mana;
-    public static final int HEALTH = 30;
+    private int HEALTH = 30;
+    private int attacked;
 
     public HeroCard() {
         super();
     }
-    public HeroCard(final String name, final  String description, final ArrayList<String> colors, final int mana) {
+    public HeroCard(final String name, final  String description,
+                    final ArrayList<String> colors, final int mana) {
         super(description, colors, name);
         this.mana = mana;
     }
@@ -32,5 +34,13 @@ public final class HeroCard extends Card {
 
     public int getHealth() {
         return HEALTH;
+    }
+
+    public void decreaseHealth(final int dec) {
+        this.HEALTH -= dec;
+    }
+
+    public void useAbility(HeroCard myHero,final int row) {
+
     }
 }

@@ -8,6 +8,7 @@ import org.poo.cards.Card;
 import org.poo.cards.HeroCard;
 import org.poo.cards.MinionCard;
 import org.poo.fileio.ActionsInput;
+import org.poo.fileio.Coordinates;
 import org.poo.fileio.GameInput;
 import org.poo.fileio.Input;
 import org.poo.game.Game;
@@ -62,7 +63,8 @@ public final class InputHandler {
      * @param game
      * @param output
      */
-    public void debugCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
+    public void debugCommands(final ActionsInput actionsInput,
+                              final Game game, final ArrayNode output) {
         ObjectMapper mapper = new ObjectMapper();
         String command = actionsInput.getCommand();
         if (command.equals("getCardsInHand")) {
@@ -90,23 +92,17 @@ public final class InputHandler {
             mainNode.put("command", "getPlayerDeck");
             mainNode.put("playerIdx", actionsInput.getPlayerIdx());
 
-            // Create the output array node
             ArrayNode outputArrayNode = mapper.createArrayNode();
 
-            // Iterate over each card in the player's deck
             for (MinionCard card : game.getBoard().getPlayer(actionsInput.getPlayerIdx()).getUsingDeck().getCards()) {
-                // Create an object node for each card
+
                 ObjectNode cardNode = cardToJson(card, mapper);
 
-                // Add the card node to the output array node
                 outputArrayNode.add(cardNode);
             }
 
-            // Attach the output array node to the main node
             mainNode.set("output", outputArrayNode);
-
             output.add(mainNode);
-
 
         } else if (command.equals("getCardsOnTable")) {
             ObjectNode mainNode = mapper.createObjectNode();
@@ -132,7 +128,6 @@ public final class InputHandler {
                 boardRows.add(rowArray);
             }
 
-// Attach the boardRows array to the mainNode as "output"
             mainNode.set("output", boardRows);
             output.add(mainNode);
 
@@ -145,18 +140,19 @@ public final class InputHandler {
 
         } else if (command.equals("getPlayerHero")) {
 
+            HeroCard hero = game.getBoard().getPlayerHero(actionsInput.getPlayerIdx());
             ObjectNode mainNode = mapper.createObjectNode();
             mainNode.put("command", "getPlayerHero");
             mainNode.put("playerIdx", actionsInput.getPlayerIdx());
 
             ObjectNode outputNode = mapper.createObjectNode();
-            outputNode.put("mana", game.getBoard().getPlayerHero(actionsInput.getPlayerIdx()).getMana());
-            outputNode.put("description", game.getBoard().getPlayerHero(actionsInput.getPlayerIdx()).getDescription());
-            outputNode.put("name", game.getBoard().getPlayerHero(actionsInput.getPlayerIdx()).getName());
-            outputNode.put("health", game.getBoard().getPlayerHero(actionsInput.getPlayerIdx()).getHealth());
+            outputNode.put("mana", hero.getMana());
+            outputNode.put("description", hero.getDescription());
+            outputNode.put("name", hero.getName());
+            outputNode.put("health", hero.getHealth());
 
             ArrayNode colorsArray = mapper.createArrayNode();
-            for (String color : game.getBoard().getPlayerHero(actionsInput.getPlayerIdx()).getColors()) {
+            for (String color : hero.getColors()) {
                 colorsArray.add(color);
             }
             outputNode.set("colors", colorsArray);
@@ -165,8 +161,25 @@ public final class InputHandler {
             output.add(mainNode);
 
         } else if (command.equals("getCardAtPosition")) {
-            if (game.getBoard().getTable().get(actionsInput.getY()).size() <= actionsInput.getX()) {
-                System.out.println("Nu exista carte pe pozitia " + actionsInput.getX() + actionsInput.getY());
+            int xTarget = actionsInput.getX();
+            int yTarget = actionsInput.getY();
+            if (!game.getBoard().areCoordinatesWithinBounds(xTarget, yTarget)) {
+                ObjectNode errorNode = mapper.createObjectNode();
+                errorNode.put("command", "getCardAtPosition");
+                errorNode.put("x", xTarget);
+                errorNode.put("y", yTarget);
+                errorNode.put("output", "No card available at that position.");
+                output.add(errorNode);
+            } else {
+                MinionCard card = game.getBoard().getCardWithCoordinates(xTarget, yTarget);
+                ObjectNode mainNode = mapper.createObjectNode();
+                mainNode.put("command", "getCardAtPosition");
+                mainNode.put("x", xTarget);
+                mainNode.put("y", yTarget);
+                ObjectNode outputNode = cardToJson(card, mapper);
+                mainNode.set("output", outputNode);
+                output.add(mainNode);
+
             }
         } else if (command.equals("getPlayerMana")) {
             ObjectNode mainNode = mapper.createObjectNode();
@@ -197,16 +210,23 @@ public final class InputHandler {
         } else if (actionsInput.getCommand().equals("getPlayerOneWins")) {
             System.out.println("");
         } else if (actionsInput.getCommand().equals("getPlayerTwoWins")) {
-
+            System.out.println("");
         } else {
             InputHandler inputHandler = new InputHandler();
             inputHandler.playCommands(actionsInput, game, output);
         }
     }
 
+    /**
+     *
+     * @param actionsInput
+     * @param game
+     * @param output
+     */
     public void playCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
         ObjectMapper mapper  = new ObjectMapper();
-        if (actionsInput.getCommand().equals("endPlayerTurn")) {
+        String command = actionsInput.getCommand();
+        if (command.equals("endPlayerTurn")) {
                 if (game.getTurn() == 1) {
                     game.setTurn(2);
                     game.setPlayerTwoRoundEnded(true);
@@ -238,7 +258,7 @@ public final class InputHandler {
                     }
                 }
 
-        } else if (actionsInput.getCommand().equals("placeCard")) {
+        } else if (command.equals("placeCard")) {
 
             Player currentPlayer = game.getBoard().getPlayer(game.getTurn());
 
@@ -284,21 +304,149 @@ public final class InputHandler {
             }
 
 
-        } else if (actionsInput.getCommand().equals("cardUsesAttack")) {
-            System.out.println();
-        } else if (actionsInput.getCommand().equals("cardUsesAbility")) {
-            System.out.println();
-        } else if (actionsInput.getCommand().equals("useAttackHero")) {
-            System.out.println();
-        } else if (actionsInput.getCommand().equals("useAbility")) {
-            System.out.println();
-        } else if (actionsInput.getCommand().equals("useHeroAbility")) {
+        } else if (command.equals("cardUsesAttack")) {
+
+                Coordinates cardAttacked = actionsInput.getCardAttacked();
+                int xAttacked = cardAttacked.getX();
+                int yAttacked = cardAttacked.getY();
+                Coordinates cardAttacker = actionsInput.getCardAttacker();
+                int xAttacker = cardAttacker.getX();
+                int yAttacker = cardAttacker.getY();
+
+                if (!game.isEnemyCard(xAttacked, yAttacked)) {
+                    System.out.println("AICI");
+                    output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card does not belong to the enemy.", "cardUsesAttack"));
+                    return;
+                }
+
+                MinionCard attacked = game.getBoard().getCardWithCoordinates(xAttacked, yAttacked);
+                MinionCard attacking = game.getBoard().getCardWithCoordinates(xAttacker, yAttacker);
+
+                if (attacking.getAttacked() == game.getNumRound()) {
+                    output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacker card has already attacked this turn.", "cardUsesAttack"));
+                    return;
+                }
+
+                if (attacking.isFrozen()) {
+                    System.out.println("Attacker card is frozen");
+                    return;
+                }
+
+                if (game.hasTankCard(turnToEnemy(game.getTurn())) & !attacked.isTank()) {
+                    output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card is not of type 'Tank'.", "cardUsesAttack"));
+                    return;
+                }
+
+                attacked.decreaseHealth(attacking.getAttackDamage());
+                if (attacked.getHealth() <= 0) {
+                    game.getBoard().removeCardWithCoordinates(xAttacked, yAttacked);
+                }
+                attacking.setAttacked(game.getNumRound());
+
+        } else if (command.equals("cardUsesAbility")) {
+            Coordinates cardAttacked = actionsInput.getCardAttacked();
+            int xAttacked = cardAttacked.getX();
+            int yAttacked = cardAttacked.getY();
+            Coordinates cardAttacker = actionsInput.getCardAttacker();
+            int xAttacker = cardAttacker.getX();
+            int yAttacker = cardAttacker.getY();
+            MinionCard attacked = game.getBoard().getCardWithCoordinates(xAttacked, yAttacked);
+            MinionCard attacking = game.getBoard().getCardWithCoordinates(xAttacker, yAttacker);
+
+            if (attacking.isFrozen()) {
+                System.out.println("Attacker card is frozen");
+                return;
+            }
+
+            if (attacking.getAttacked() == game.getNumRound()) {
+                output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacker card has already attacked this turn.", "cardUsesAbility"));
+                return;
+            }
+
+            if (attacking.getName().equals("Disciple") & game.isEnemyCard(xAttacked, yAttacked)) {
+                output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card does not belong to the current player.", "cardUsesAbility"));
+                return;
+            }
+
+            if (!attacking.getName().equals("Disciple") & !game.isEnemyCard(xAttacked, yAttacked)) {
+                output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card does not belong to the enemy.", "cardUsesAbility"));
+                return;
+            }
+
+            if (!attacking.getName().equals("Disciple") & game.hasTankCard(turnToEnemy(game.getTurn())) & !attacked.isTank()) {
+                output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card is not of type 'Tank'.", "cardUsesAbility"));
+                return;
+            }
+
+            attacking.useSpecialAbility(attacked);
+            if (attacked.getHealth() <= 0) {
+                game.getBoard().removeCardWithCoordinates(xAttacked, yAttacked);
+            }
+            attacking.setAttacked(game.getNumRound());
+
+
+        } else if (command.equals("useAttackHero")) {
+            Coordinates cardAttacker = actionsInput.getCardAttacker();
+            int xAttacker = cardAttacker.getX();
+            int yAttacker = cardAttacker.getY();
+            MinionCard attacking = game.getBoard().getCardWithCoordinates(xAttacker, yAttacker);
+            if (attacking.isFrozen()) {
+                System.out.println("Attacker card is frozen");
+                return;
+            }
+            if (attacking.getAttacked() == game.getNumRound()) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                ObjectNode attackerNode = mapper.createObjectNode();
+                attackerNode.put("x", cardAttacker.getX());
+                attackerNode.put("y", cardAttacker.getY());
+                mainNode.set("cardAttacker", attackerNode);
+
+                mainNode.put("error", "Attacker card has already attacked this turn.");
+                output.add(mainNode);
+                return;
+            }
+            if (game.hasTankCard(turnToEnemy(game.getTurn()))) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                ObjectNode attackerNode = mapper.createObjectNode();
+                attackerNode.put("x", cardAttacker.getX());
+                attackerNode.put("y", cardAttacker.getY());
+                mainNode.set("cardAttacker", attackerNode);
+
+                mainNode.put("error", "Attacked card is not of type 'Tank'.");
+                output.add(mainNode);
+                return;
+            }
+            HeroCard attackedHero = game.getBoard().getPlayerHero(turnToEnemy(game.getTurn()));
+            attackedHero.decreaseHealth(attacking.getAttackDamage());
+            if (attackedHero.getHealth() <= 0) {
+                ObjectNode mainNode = mapper.createObjectNode();
+                if (game.getTurn() == 1) {
+                    mainNode.put("gameEnded", "Player one killed the enemy hero.");
+                } else {
+                    mainNode.put("gameEnded", "Player two killed the enemy hero.");
+                }
+                output.add(mainNode);
+            }
+            attacking.setAttacked(game.getNumRound());
+        } else if (command.equals("useHeroAbility")) {
             System.out.println();
         } else {
             System.out.println(actionsInput.getCommand());
         }
     }
 
+    /**
+     *
+     * @param card
+     * @param mapper
+     * @return ObjectNode representing the card in JSON format
+     */
     public static ObjectNode cardToJson(final Card card, final ObjectMapper mapper) {
         ObjectNode outputNode = mapper.createObjectNode();
 
@@ -315,6 +463,46 @@ public final class InputHandler {
         outputNode.set("colors", colorsArray);
 
         return outputNode;
+    }
+
+    /**
+     *
+     * @param turn
+     * @return
+     */
+    public int turnToEnemy(final int turn) {
+        if (turn == 1) {
+            return 2;
+        }
+        return 1;
+    }
+
+    /**
+     *
+     * @param attackerCard
+     * @param attackedCard
+     * @param mapper
+     * @param error
+     * @param command
+     * @return
+     */
+    public ObjectNode attackErrorToJson(final Coordinates attackerCard, final Coordinates attackedCard, final ObjectMapper mapper, final String error, final String command) {
+        ObjectNode mainNode = mapper.createObjectNode();
+
+        mainNode.put("command", command);
+
+        ObjectNode attackerNode = mapper.createObjectNode();
+        attackerNode.put("x", attackerCard.getX());
+        attackerNode.put("y", attackerCard.getY());
+        mainNode.set("cardAttacker", attackerNode);
+
+        ObjectNode attackedNode = mapper.createObjectNode();
+        attackedNode.put("x", attackedCard.getX());
+        attackedNode.put("y", attackedCard.getY());
+        mainNode.set("cardAttacked", attackedNode);
+
+        mainNode.put("error", error);
+        return mainNode;
     }
 
 }
