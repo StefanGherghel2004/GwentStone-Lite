@@ -80,8 +80,8 @@ public final class MinionCard extends Card {
         }
     }
 
-    private void increaseHealth(final int inc) {
-        this.health += inc;
+    public void increaseHealth(final int inc) {
+        health += inc;
     }
 
     /**
@@ -130,4 +130,7 @@ public final class MinionCard extends Card {
         this.health -= otherHealth;
     }
 
+    public void increaseAttackDamage(final int inc) {
+        attackDamage += inc;
+    }
 }

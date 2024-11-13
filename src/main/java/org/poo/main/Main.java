@@ -84,8 +84,14 @@ public final class Main {
          InputHandler handler = new InputHandler();
          ArrayList<GameInput> games = inputData.getGames();
          Game game = new Game();
+         int gamesPlayed = 0;
+         int playerOneWins = 0;
+         int playerTwoWins = 0;
          for (GameInput g : games) {
              game = handler.setInitialSetup(inputData, g);
+             game.setGamesPlayed(gamesPlayed);
+             game.setPlayerOneWins(playerOneWins);
+             game.setPlayerTwoWins(playerTwoWins);
              MinionCard oneCardDraw = game.getBoard().getPlayer(1).getUsingDeck().getCards().get(0);
              MinionCard twoCardDraw = game.getBoard().getPlayer(2).getUsingDeck().getCards().get(0);
              game.getBoard().getPlayer(1).getHand().add(oneCardDraw);
@@ -98,11 +104,13 @@ public final class Main {
              for (ActionsInput action : g.getActions()) {
                  handler.debugCommands(action, game, output);
              }
+             gamesPlayed = game.getGamesPlayed();
+             playerOneWins = game.getPlayerOneWins();
+             playerTwoWins = game.getPlayerTwoWins();
          }
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
     }
-    // need of copy constructor
 
 }

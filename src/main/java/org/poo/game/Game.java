@@ -15,6 +15,10 @@ public final class Game {
     private boolean playerOneRoundEnded;
     private boolean playerTwoRoundEnded;
     private int numRound;
+    private int playerOneWins;
+    private int playerTwoWins;
+    private int gamesPlayed;
+
     public Game(final Board board, final int turn) {
         this.board = board;
         this.turn = turn;
@@ -81,6 +85,19 @@ public final class Game {
             }
         }
         return false;
+    }
+
+    public void incGamesPlayed() {
+        gamesPlayed++;
+    }
+
+    public void incPlayerWins(final int idx) {
+        if (idx == 1) {
+            playerOneWins++;
+        } else {
+            playerTwoWins++;
+        }
+
     }
 
 

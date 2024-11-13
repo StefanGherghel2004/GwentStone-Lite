@@ -191,7 +191,27 @@ public final class InputHandler {
             output.add(mainNode);
 
         } else if (command.equals("getFrozenCardsOnTable")) {
-            System.out.println("");
+            ObjectNode mainNode = mapper.createObjectNode();
+            mainNode.put("command", "getFrozenCardsOnTable");
+
+            ArrayNode frozenCardsArray = mapper.createArrayNode();
+
+            for (int rowIndex = 0; rowIndex < game.getBoard().getTable().size(); rowIndex++) {
+                ArrayList<MinionCard> boardRow = game.getBoard().getRow(rowIndex);
+
+                // Iterate over each card in the row
+                for (MinionCard card : boardRow) {
+                    if (card != null && card.isFrozen()) {
+                        // Convert the card to JSON and add it to the frozenCardsArray
+                        ObjectNode cardNode = cardToJson(card, mapper);
+                        frozenCardsArray.add(cardNode);
+                    }
+                }
+            }
+
+            mainNode.set("output", frozenCardsArray);
+            output.add(mainNode);
+
         } else {
             InputHandler inputHandler = new InputHandler();
             inputHandler.statsCommands(actionsInput, game, output);
@@ -205,12 +225,24 @@ public final class InputHandler {
      * @param output
      */
     public void statsCommands(final ActionsInput actionsInput, final Game game, final ArrayNode output) {
+        ObjectMapper mapper = new ObjectMapper();
         if (actionsInput.getCommand().equals("getTotalGamesPlayed")) {
-            System.out.println("");
+            ObjectNode errorNode = mapper.createObjectNode();
+            errorNode.put("command", "getTotalGamesPlayed");
+            errorNode.put("output", game.getGamesPlayed());
+
+            output.add(errorNode);
         } else if (actionsInput.getCommand().equals("getPlayerOneWins")) {
-            System.out.println("");
+            ObjectNode errorNode = mapper.createObjectNode();
+            errorNode.put("command", "getPlayerOneWins");
+            errorNode.put("output", game.getPlayerOneWins());
+
+            output.add(errorNode);
         } else if (actionsInput.getCommand().equals("getPlayerTwoWins")) {
-            System.out.println("");
+            ObjectNode errorNode = mapper.createObjectNode();
+            errorNode.put("command", "getPlayerTwoWins");
+            errorNode.put("output", game.getPlayerTwoWins());
+            output.add(errorNode);
         } else {
             InputHandler inputHandler = new InputHandler();
             inputHandler.playCommands(actionsInput, game, output);
@@ -228,13 +260,30 @@ public final class InputHandler {
         String command = actionsInput.getCommand();
         if (command.equals("endPlayerTurn")) {
                 if (game.getTurn() == 1) {
+                    ArrayList<MinionCard> frontrow = game.getBoard().getTable().get(2);
+                    for (MinionCard card : frontrow) {
+                        card.setFrozen(false);
+                    }
+                    ArrayList<MinionCard> backtrow = game.getBoard().getTable().get(3);
+                    for (MinionCard card : backtrow) {
+                        card.setFrozen(false);
+                    }
                     game.setTurn(2);
                     game.setPlayerTwoRoundEnded(true);
                 } else if (game.getTurn() == 2) {
+                    ArrayList<MinionCard> frontrow = game.getBoard().getTable().get(1);
+                    for (MinionCard card : frontrow) {
+                        card.setFrozen(false);
+                    }
+                    ArrayList<MinionCard> backtrow = game.getBoard().getTable().get(0);
+                    for (MinionCard card : backtrow) {
+                        card.setFrozen(false);
+                    }
                     game.setTurn(1);
                     game.setPlayerOneRoundEnded(true);
                 }
                 // new round
+
                 if (game.getPlayerOneRoundEnded() == game.getPlayerTwoRoundEnded()) {
                     game.setPlayerTwoRoundEnded(false);
                     game.setPlayerOneRoundEnded(false);
@@ -314,7 +363,6 @@ public final class InputHandler {
                 int yAttacker = cardAttacker.getY();
 
                 if (!game.isEnemyCard(xAttacked, yAttacked)) {
-                    System.out.println("AICI");
                     output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacked card does not belong to the enemy.", "cardUsesAttack"));
                     return;
                 }
@@ -328,7 +376,7 @@ public final class InputHandler {
                 }
 
                 if (attacking.isFrozen()) {
-                    System.out.println("Attacker card is frozen");
+                    output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacker card is frozen.", "cardUsesAttack"));
                     return;
                 }
 
@@ -354,7 +402,7 @@ public final class InputHandler {
             MinionCard attacking = game.getBoard().getCardWithCoordinates(xAttacker, yAttacker);
 
             if (attacking.isFrozen()) {
-                System.out.println("Attacker card is frozen");
+                output.add(attackErrorToJson(cardAttacker, cardAttacked, mapper, "Attacker card is frozen.", "cardUsesAbility"));
                 return;
             }
 
@@ -391,7 +439,17 @@ public final class InputHandler {
             int yAttacker = cardAttacker.getY();
             MinionCard attacking = game.getBoard().getCardWithCoordinates(xAttacker, yAttacker);
             if (attacking.isFrozen()) {
-                System.out.println("Attacker card is frozen");
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                ObjectNode attackerNode = mapper.createObjectNode();
+                attackerNode.put("x", cardAttacker.getX());
+                attackerNode.put("y", cardAttacker.getY());
+                mainNode.set("cardAttacker", attackerNode);
+
+                mainNode.put("error", "Attacker card is frozen.");
+                output.add(mainNode);
                 return;
             }
             if (attacking.getAttacked() == game.getNumRound()) {
@@ -431,11 +489,61 @@ public final class InputHandler {
                 } else {
                     mainNode.put("gameEnded", "Player two killed the enemy hero.");
                 }
+
+                game.incPlayerWins(game.getTurn());
+                game.incGamesPlayed();
                 output.add(mainNode);
             }
             attacking.setAttacked(game.getNumRound());
         } else if (command.equals("useHeroAbility")) {
-            System.out.println();
+            int affectedRow = actionsInput.getAffectedRow();
+            HeroCard hero = game.getBoard().getPlayerHero(game.getTurn());
+            if (game.getBoard().getPlayer(game.getTurn()).getMana() < hero.getMana()) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                mainNode.put("affectedRow", affectedRow);
+                mainNode.put("error", "Not enough mana to use hero's ability.");
+                output.add(mainNode);
+                return;
+            }
+
+            if (hero.getAttacked() == game.getNumRound()) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                mainNode.put("affectedRow", affectedRow);
+                mainNode.put("error", "Hero has already attacked this turn.");
+                output.add(mainNode);
+                return;
+            }
+
+            if ((hero.getName().equals("Lord Royce") | hero.getName().equals("Empress Thorina")) & (!game.isEnemyCard(affectedRow, 0))) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                mainNode.put("affectedRow", affectedRow);
+                mainNode.put("error", "Selected row does not belong to the enemy.");
+                output.add(mainNode);
+                return;
+            }
+            if ((hero.getName().equals("General Kocioraw") | hero.getName().equals("King Mudface")) & (game.isEnemyCard(affectedRow, 0))) {
+                ObjectNode mainNode = mapper.createObjectNode();
+
+                mainNode.put("command", command);
+
+                mainNode.put("affectedRow", affectedRow);
+                mainNode.put("error", "Selected row does not belong to the current player.");
+                output.add(mainNode);
+                return;
+            }
+
+            hero.useAbility(hero, game.getBoard().getRow(affectedRow));
+            game.getBoard().getPlayer(game.getTurn()).decreaseMana(hero.getMana());
+            hero.setAttacked(game.getNumRound());
         } else {
             System.out.println(actionsInput.getCommand());
         }
