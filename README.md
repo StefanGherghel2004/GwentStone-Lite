@@ -1,42 +1,45 @@
+##### Student - Gherghel Stefan-Ciprian 323CA
 
-
-# Tema POO  - GwentStone
-
-<div align="center"><img src="https://tenor.com/view/witcher3-gif-9340436.gif" width="500px"></div>
+# Assignment 0 OOP  - GwentStone Lite
 
 #### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema)
 
+Throughout this project, I implemented several classes that interact with each other to create a functional game system.
+Here’s a breakdown of how these classes work together:
 
-## Skel Structure
+## Interaction of Classes
 
-* src/
-  * checker/ - checker files
-  * fileio/ - contains classes used to read data from the json files
-  * main/
-      * Main - the Main class runs the checker on your implementation. Add the entry point to your implementation in it. Run Main to test your implementation from the IDE or from command line.
-      * Test - run the main method from Test class with the name of the input file from the command line and the result will be written
-        to the out.txt file. Thus, you can compare this result with ref.
-* input/ - contains the tests in JSON format
-* ref/ - contains all reference output for the tests in JSON format
+#### InputHandler Class
+The **InputHandler** class is a crucial part of the game, responsible for the initial setup of the game and managing
+and processing various inputs related to the game's setup, debugging, statistics, and in-game actions. It is designed
+to interpret commands that are received as input and generate appropriate responses, which are in the form of JSON
+objects. These responses provide feedback to the user or modify the game state accordingly.
 
-## Tests
+#### Game Class
+The **Game** class The Game class in your code represents the core logic and mechanics of a card game between two
+players. It maintains the game's state, manages the flow of turns, and handles various actions like drawing cards,
+managing mana, and updating player stats. It contains the **Board** class instance that represents the actual state of
+the game, containing the players and the table of cards.
+#### Board Class
+This class provides functionality for accessing, manipulating, and displaying the board's state in JSON format,
+respectively the cards on the board and the heroes of the players.
 
-1. test01_game_start - 4p
-2. test02_place_card - 5p
-3. test03_place_card_invalid - 5p
-4. test04_attack_card - 5p
-5. test05_attack_card_invalid - 5p
-6. test06_use_card_ability - 5p
-7. test07_use_card_ability_invalid - 5p
-8. test08_attack_hero - 5p
-9. test09_attack_hero_invalid - 5p
-10. test10_use_hero_ability_1 - 4p
-11. test11_use_hero_ability_2 - 4p
-12. test12_use_hero_ability_invalid_1 - 4p
-13. test13_use_hero_ability_invalid_2 - 4p
-14. test14_multiple_games_valid - 5p
-15. test15_multiple_games_invalid - 5p
-16. test16_big_game - 10p
+#### Player Class
+The **Player** class contains the decks, usingDeck(the one picked at the beginning of the game), hand and hero fields,
+offering functionality for placing a card on the table and representing some data in JSON format
+
+#### Deck Class
+The **Deck** class contains an ArrayList of cards, containing the functionality to shuffle the cards with a given seed. 
+
+#### Card and its subclasses (MinionCard, HeroCard)
+The **Card** class serves as a prototype for MinionCard and HeroCard classes and can be made abstract.
+The methods in subclasses of **Card** class offer functionality to attack other cards or ArrayList of cards based
+on current game context, updating the JSON output in case of an error or if the game ends when a hero is killed.
 
 
-<div align="center"><img src="https://tenor.com/view/homework-time-gif-24854817.gif" width="500px"></div>
+## Potential Improvements
+While implementing this project, I realized that the structure could have benefited from a more careful application of
+object-oriented design principles. One key improvement would have been the creation of a **skeleton structure** before
+diving into the actual implementation, defined by a more strategic use of inheritance and polymorphism to 
+handle different types of cards (e.g., MinionCard, HeroCard) and game actions. This would help reduce redundancy and 
+increase flexibility for future changes and expansions.

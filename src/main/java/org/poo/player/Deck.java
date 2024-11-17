@@ -16,8 +16,8 @@ public final class Deck {
     }
 
     /**
-     *
-     * @param seed
+     * Method to shuffle the cards in given deck at the start of new game
+     * @param seed seed used for shuffling the cards using Random class
      */
     public void shuffle(final int seed) {
         Random random = new Random(seed);

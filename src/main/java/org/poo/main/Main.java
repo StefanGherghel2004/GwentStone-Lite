@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.cards.MinionCard;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
-import org.poo.fileio.*;
+import org.poo.fileio.ActionsInput;
+import org.poo.fileio.GameInput;
+import org.poo.fileio.Input;
 import org.poo.game.Game;
 import org.poo.inputhandler.InputHandler;
 import java.io.File;
@@ -80,33 +81,22 @@ public final class Main {
 
          ArrayNode arrayNode = mapper.createArrayNode();
          arrayNode.add(objectNode);
+
          // implementing my approach for calling methods
          InputHandler handler = new InputHandler();
          ArrayList<GameInput> games = inputData.getGames();
          Game game = new Game();
          int gamesPlayed = 0;
-         int playerOneWins = 0;
-         int playerTwoWins = 0;
+         int pOneWins = 0;
+         int pTwoWins = 0;
          for (GameInput g : games) {
-             game = handler.setInitialSetup(inputData, g);
-             game.setGamesPlayed(gamesPlayed);
-             game.setPlayerOneWins(playerOneWins);
-             game.setPlayerTwoWins(playerTwoWins);
-             MinionCard oneCardDraw = game.getBoard().getPlayer(1).getUsingDeck().getCards().get(0);
-             MinionCard twoCardDraw = game.getBoard().getPlayer(2).getUsingDeck().getCards().get(0);
-             game.getBoard().getPlayer(1).getHand().add(oneCardDraw);
-             game.getBoard().getPlayer(2).getHand().add(twoCardDraw);
-             game.getBoard().getPlayer(1).getUsingDeck().getCards().removeFirst();
-             game.getBoard().getPlayer(2).getUsingDeck().getCards().removeFirst();
-             game.getBoard().getPlayer(1).setMana(1);
-             game.getBoard().getPlayer(2).setMana(1);
-             game.setNumRound(1);
+             game = handler.setInitialSetup(inputData, g, gamesPlayed, pOneWins, pTwoWins);
              for (ActionsInput action : g.getActions()) {
                  handler.debugCommands(action, game, output);
              }
              gamesPlayed = game.getGamesPlayed();
-             playerOneWins = game.getPlayerOneWins();
-             playerTwoWins = game.getPlayerTwoWins();
+             pOneWins = game.getPlayerOneWins();
+             pTwoWins = game.getPlayerTwoWins();
          }
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();

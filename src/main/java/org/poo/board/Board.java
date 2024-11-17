@@ -1,5 +1,8 @@
 package org.poo.board;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.cards.HeroCard;
@@ -10,13 +13,15 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public final class Board {
-    private static final int ROWS = 4;
+     private static final int ROWS = 4;
 
-    final private ArrayList<ArrayList<MinionCard>> table;
+    @Getter
+    // the 4 x 5  array of cards
+    private final ArrayList<ArrayList<MinionCard>> table;
     private Player playerOne;
     private Player playerTwo;
 
-    // Default constructor that initializes the board with ROWS x COLUMNS
+    // Default constructor that initializes the board with the empty rows
     public Board() {
         table = new ArrayList<>(ROWS);
         for (int i = 0; i < ROWS; i++) {
@@ -32,30 +37,30 @@ public final class Board {
     }
 
     /**
-     *
-     * @param x
-     * @param y
-     * @return
+     * Getting the card with given coordinates on the table
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return the MinionCard card at (x,y) on the table
      */
     public MinionCard getCardWithCoordinates(final int x, final int y) {
-        // Adjust y index to 0-based for ArrayList indexing
         return table.get(x).get(y);
     }
 
     /**
-     *
-     * @param x
-     * @param y
+     *Removing the card with given coordinates on the table
+     * @param x x-coordinate
+     * @param y y-coordinate
      */
     public void removeCardWithCoordinates(final int x, final int y) {
         table.get(x).remove(y);
     }
 
     /**
-     *
-     * @param x
-     * @param y
-     * @return
+     * Determines if given coordinates are valid for current table configuraiton
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return true if the coordinates are valid
+     *          false otherwise
      */
     public boolean areCoordinatesWithinBounds(final int x, final int y) {
         if (x > table.size() - 1) {
@@ -69,19 +74,9 @@ public final class Board {
     }
 
     /**
-     *
-     * @param x
-     * @param y
-     * @param card
-     */
-    public void setCardWithCoordinates(final int x, final int y, final MinionCard card) {
-        table.get(x).set(y - 1, card);
-    }
-
-    /**
-     *
-     * @param playerNumber
-     * @return
+     * Returning the hero of a player based on the index given
+     * @param playerNumber the index of the player
+     * @return the hero of player
      */
     public HeroCard getPlayerHero(final int playerNumber) {
         return playerNumber == 1 ? playerOne.getHeroCard() : playerTwo.getHeroCard();
@@ -89,21 +84,9 @@ public final class Board {
 
     /**
      *
-     * @param playerIdx
-     * @param hero
-     */
-    public void setHero(final int playerIdx, final HeroCard hero) {
-        if (playerIdx == 1) {
-            playerOne.setHeroCard(hero);
-        } else if (playerIdx == 2) {
-            playerTwo.setHeroCard(hero);
-        }
-    }
-
-    /**
-     *
-     * @param playerIdx
-     * @return
+     * @param playerIdx the given index ot the player
+     * @return playerOne if the index is 1
+     *         playerTwo otherwise (2)
      */
     public Player getPlayer(final int playerIdx) {
         return playerIdx == 1 ? playerOne : playerTwo;
@@ -112,14 +95,98 @@ public final class Board {
 
     /**
      *
-     * @param rowIndex
-     * @return
+     * @param rowIndex given index of the row
+     * @return the ArrayList of MinionCard type at given index in the table
      */
     public ArrayList<MinionCard> getRow(final int rowIndex) {
         return table.get(rowIndex);
     }
 
-    public ArrayList<ArrayList<MinionCard>> getTable() {
-        return table;
+    /**
+     * Converts the table in a JSON representation (the cards on table)
+     * @param mapper ObjectMapper to generate JSON
+     * @return the JSON representation of the table
+     */
+    public ObjectNode toJson(final ObjectMapper mapper) {
+        ObjectNode mainNode = mapper.createObjectNode();
+        mainNode.put("command", "getCardsOnTable");
+
+        ArrayNode boardRows = mapper.createArrayNode();
+
+        // if a row has no cards it will be printed as an empty arrayNode
+        for (int rowIndex = 0; rowIndex < getTable().size(); rowIndex++) {
+            ArrayList<MinionCard> boardRow = getRow(rowIndex);
+            ArrayNode rowArray = mapper.createArrayNode();
+
+            for (MinionCard card : boardRow) {
+                ObjectNode cardNode = card.toJson(mapper);
+                rowArray.add(cardNode);
+            }
+
+            boardRows.add(rowArray);
+        }
+
+        mainNode.set("output", boardRows);
+        return mainNode;
     }
+
+    /**
+     * Converts a card with given coordinates to JSON
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param mapper  ObjectMapper for JSON representation
+     * @return the representation  of the card with given coordinates
+     */
+    public ObjectNode getCardAtPositionJson(final int x, final int y,
+                                            final ObjectMapper mapper) {
+        ObjectNode responseNode = mapper.createObjectNode();
+
+        if (!areCoordinatesWithinBounds(x, y)) {
+            responseNode.put("command", "getCardAtPosition");
+            responseNode.put("x", x);
+            responseNode.put("y", y);
+            responseNode.put("output", "No card available at that position.");
+        } else {
+            MinionCard card = getCardWithCoordinates(x, y);
+            responseNode.put("command", "getCardAtPosition");
+            responseNode.put("x", x);
+            responseNode.put("y", y);
+
+            if (card != null) {
+                ObjectNode cardNode = card.toJson(mapper);
+                responseNode.set("output", cardNode);
+            } else {
+                responseNode.put("output", "No card available at that position.");
+            }
+        }
+
+        return responseNode;
+    }
+
+    /**
+     *
+     * @param mapper ObjectMapper for JSON representation
+     * @return Object Node containing an ArrayNode of all frozen cards on table
+     */
+    public ObjectNode toJsonFrozen(final ObjectMapper mapper) {
+        ObjectNode mainNode = mapper.createObjectNode();
+        mainNode.put("command", "getFrozenCardsOnTable");
+
+        ArrayNode frozenCardsArray = mapper.createArrayNode();
+
+        for (int rowIndex = 0; rowIndex < table.size(); rowIndex++) {
+            ArrayList<MinionCard> boardRow = table.get(rowIndex);
+
+            for (MinionCard card : boardRow) {
+                if (card.isFrozen()) {
+                    ObjectNode cardNode = card.toJson(mapper);
+                    frozenCardsArray.add(cardNode);
+                }
+            }
+        }
+
+        mainNode.set("output", frozenCardsArray);
+        return mainNode;
+    }
+
 }

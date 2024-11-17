@@ -1,8 +1,12 @@
 package org.poo.cards;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.fileio.CardInput;
+import org.poo.fileio.Coordinates;
+import org.poo.game.Game;
 
 import java.util.ArrayList;
 
@@ -28,15 +32,30 @@ public class Card {
         this.name = name;
     }
 
-    public int getMana() {
-        return 0;
+    /**
+     *
+     * @param mapper ObjectMapper used for JSON creation
+     * @return a JSON node representing the card
+     *      returns null because it is overridden in subclasses Minioncard, HeroCard
+     */
+    public ObjectNode toJson(final ObjectMapper mapper) {
+        return null;
     }
 
-    public int getHealth() {
-        return 0;
-    }
-
-    public int getAttackDamage() {
-        return 0;
+    /**
+     * Allows the card to use its attack ability on a target
+     *
+     * @param target the card being attacked
+     * @param game the current game context
+     * @param mapper ObjectMapper used for generating JSON representation
+     * @param attackerCoords coordinates of attacking card
+     * @param targetCoords coordinates of target card
+     * @return a JSON node representing the result of the attack (just in case of an error)
+     *        returns null because it is overridden in subclass Minioncard
+     */
+    public ObjectNode useAttack(final MinionCard target, final  Game game,
+                                final  ObjectMapper mapper, final Coordinates attackerCoords,
+                                final Coordinates targetCoords) {
+        return null;
     }
 }
