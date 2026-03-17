@@ -2,7 +2,7 @@
 
 # Assignment 0 OOP  - GwentStone Lite
 
-#### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema)
+#### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema](https://ocw.cs.pub.ro/courses/poo-ca-cd/arhiva/teme/2024/tema)
 
 Throughout this project, I implemented several classes that interact with each other to create a functional game system.
 Here’s a breakdown of how these classes work together:
